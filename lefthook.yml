@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  commands:
+    # Run Prettier formatter
+    # Note: JS and TS files are already checked with eslint
+    format:
+      glob: '*.{css,less,sass,scss,json,json5,yml,yaml,md,mdx,graphql}'
+      run: pnpm prettier --check {staged_files}
+
+    # Run ESLint
+    eslint:
+      glob: '*.{js,ts,jsx,tsx}'
+      run: pnpm eslint {staged_files}

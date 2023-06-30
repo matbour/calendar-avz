@@ -1,0 +1,16 @@
+/.idea
+/.git
+
+/node_modules
+
+# Next.js outputs
+/.next
+/out
+
+# This should not be modified by external programs
+/pnpm-lock.yaml
+
+# PWA
+**/public/workbox-*.js*
+**/public/sw.js*
+**/public/worker-*.js*

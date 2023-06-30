@@ -1,25 +1,37 @@
 {
   "name": "calendar-avz",
   "version": "0.1.0",
-  "private": true,
+  "author": "Mathieu Bour <mathieu@bour.tech>",
+  "type": "module",
   "scripts": {
+    "clean": "rimraf .next coverage",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "format": "prettier --check '**/*.{js,jsx,ts,tsx,css,less,sass,scss,json,json5,yml,yaml,md,mdx,graphql}'",
+    "format:fix": "prettier --write '**/*.{js,jsx,ts,tsx,css,less,sass,scss,json,json5,yml,yaml,md,mdx,graphql}'",
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix '**/*.{js,jsx,ts,tsx}'",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@types/node": "20.3.2",
-    "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.6",
-    "autoprefixer": "10.4.14",
-    "eslint": "8.43.0",
-    "eslint-config-next": "13.4.7",
-    "next": "13.4.7",
-    "postcss": "8.4.24",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.1.6"
-  }
+    "next": "^13.4.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tsconfig/strictest": "^2.0.1",
+    "@types/node": "^20.3.2",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.43.0",
+    "eslint-config-next": "^13.4.7",
+    "lefthook": "^1.4.3",
+    "postcss": "^8.4.24",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.1.6"
+  },
+  "private": true
 }
