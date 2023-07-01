@@ -9,19 +9,24 @@ const schemaIn = z.object({
 type In = z.input<typeof schemaIn>;
 
 const schemaOut = z.object({
-  id: z.string(),
-  url: z.string(),
+  id: z.number().int().positive(),
+  topic: z.string(),
+  start_time: z.string().transform((str) => new Date(str)),
+  duration: z.number(),
+  timezone: z.string(),
+  password: z.string(),
+  join_url: z.string().url(),
 });
-type Out = z.infer<typeof schemaOut>;
+export type Meeting = z.infer<typeof schemaOut>;
 
 /**
  * Create a Zoom meeting via our internal API.
  * @param options The useMutation options.
  */
 export default function useCreateMeeting(
-  options?: Omit<UseMutationOptions<Out, unknown, In>, 'mutationFn'>,
+  options?: Omit<UseMutationOptions<Meeting, unknown, In>, 'mutationFn'>,
 ) {
-  return useMutation<Out, unknown, In>({
+  return useMutation<Meeting, unknown, In>({
     ...options,
     mutationFn: async (vars) => {
       const res = await fetch('/api/meetings', {

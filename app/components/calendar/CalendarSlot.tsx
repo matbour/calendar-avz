@@ -1,3 +1,6 @@
+import { Expand, Grab, useCalendar } from '@/app/components/calendar/CalendarContext';
+import NewMeeting from '@/app/components/calendar/NewMeeting';
+import ChevronDoubleLeft from '@heroicons/react/24/solid/ChevronDoubleLeftIcon';
 import { clsx } from 'clsx';
 import differenceInMinutes from 'date-fns/esm/differenceInMinutes';
 import getDate from 'date-fns/esm/getDate';
@@ -8,17 +11,18 @@ import set from 'date-fns/esm/set';
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { usePopper } from 'react-popper';
-import { Expand, Grab, useCalendar } from './CalendarContext';
-import NewMeeting from './NewMeeting';
 
-import ChevronDoubleLeft from '@heroicons/react/24/solid/ChevronDoubleLeftIcon';
 interface CalendarSlotProps {
   date: Date;
   className?: string;
 }
 
+/**
+ * CalendarSlot handles all the drag'n'drop logic.
+ */
 const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
   const { start, setStart, duration, setDuration } = useCalendar();
+  /** Meetings cannot be scheduled in the past. */
   const disabled = isPast(date);
 
   /**
@@ -39,6 +43,7 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
     setDuration(diffInMinutes + 30); // always add 1 slot
   };
 
+  // Move the meeting to another date
   const [{ isDragging: isGrabbing }, grab] = useDrag(() => ({
     type: Grab,
     collect: (monitor) => ({
@@ -49,7 +54,11 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
   const [{ isOver: isGrabOver }, grabDrop] = useDrop(
     () => ({
       accept: Grab,
-      drop: () => setStart(date),
+      drop: () => {
+        if (!disabled) {
+          setStart(date);
+        }
+      },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
       }),
@@ -91,6 +100,7 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
     return start.getTime() - date.getTime() < 30 * 60 * 1000;
   }, [date, isGrabOver, start]);
 
+  // Use Popper.js to set the position of the meeeting dialog
   const [$ref, $setRef] = useState<HTMLDivElement | null>(null);
   const [$popper, $setPopper] = useState<HTMLFormElement | null>(null);
   const { styles, attributes, update } = usePopper($ref, $popper, {
@@ -100,7 +110,6 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
 
   const onReset = () => {
     setStart(date);
-    // setDuration(defaultCalendarContextData.duration);
   };
 
   // Update popper position when the duration changes

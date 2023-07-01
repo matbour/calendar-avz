@@ -8,9 +8,19 @@ interface CreateMeetingOptions {
 
 const meetingSchema = z.object({
   id: z.number().int().positive(),
+  topic: z.string(),
+  start_time: z.string(),
+  duration: z.number(),
+  timezone: z.string(),
+  password: z.string(),
   join_url: z.string().url(),
 });
 
+/**
+ * Create new Zoom meeting
+ * @param token The Zoom API authentication token.
+ * @param options The meeting details.
+ */
 export default async function createMeeting(token: string, options: CreateMeetingOptions) {
   const data = {
     topic: options.subject,

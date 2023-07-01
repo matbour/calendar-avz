@@ -1,24 +1,23 @@
+import { useCalendar } from '@/app/components/calendar/CalendarContext';
+import CalendarSlot from '@/app/components/calendar/CalendarSlot';
+import withDnd from '@/app/components/withDnd';
 import eachMinuteOfInterval from 'date-fns/esm/eachMinuteOfInterval';
 import endOfDay from 'date-fns/esm/endOfDay';
 import { useEffect, useState, type FC } from 'react';
 import { useWindowSize } from 'usehooks-ts';
-import useWeek from '../../hooks/useWeek';
-import withDnd from '../withDnd';
-import { useCalendar } from './CalendarContext';
-import CalendarSlot from './CalendarSlot';
 
-interface CalendarGridProps {}
+/**
+ * The CalendarGrid exposes all slots as items of a display: grid div.
+ */
+const CalendarGrid: FC = () => {
+  const { monday, sunday } = useCalendar();
+  const times = eachMinuteOfInterval({ start: monday, end: endOfDay(monday) }, { step: 30 });
+  const slots = eachMinuteOfInterval({ start: monday, end: sunday }, { step: 30 });
 
-const CalendarGrid: FC<CalendarGridProps> = () => {
-  const { dateRef } = useCalendar();
-  const { start, end } = useWeek(dateRef);
-  const times = eachMinuteOfInterval({ start, end: endOfDay(start) }, { step: 30 });
-  const slots = eachMinuteOfInterval({ start, end }, { step: 30 });
-
-  // Dynamically defined the height of the grid
   const [area, setArea] = useState<HTMLDivElement | null>(null);
   const { height } = useWindowSize();
 
+  // Dynamically compute the height of the grid based on the height of the window
   useEffect(() => {
     if (!area) {
       return;

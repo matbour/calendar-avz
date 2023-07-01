@@ -1,3 +1,4 @@
+import Header from '@/app/components/layout/Header';
 import Providers from '@/app/providers';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -8,7 +9,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="min-h-screen">
+            <Header />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

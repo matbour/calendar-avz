@@ -1,0 +1,6 @@
+{
+  "entry": ["*.config.{cjs,js}", "app/**/{layout,page}.{ts,tsx}", "app/api/**/route.ts"],
+  "ignoreUnresolved": [],
+  "ignoreUnused": [],
+  "ignoreUnimported": []
+}

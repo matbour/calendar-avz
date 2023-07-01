@@ -15,5 +15,5 @@ export async function POST(req: Request) {
   const { access_token } = await getToken();
   const meeting = await createMeeting(access_token, options);
 
-  return NextResponse.json({ status: 'ok', data: meeting });
+  return NextResponse.json(meeting);
 }

@@ -1,0 +1,36 @@
+name: Quality assessment
+on:
+  push:
+    tags: ['v*']
+    branches: [main, dev]
+  pull_request:
+    branches: [dev]
+    types: [opened, reopened, synchronize]
+
+jobs:
+  eslint:
+    name: Lint the code with ESLint
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Setup environment
+        uses: pooky-labs/actions/setup-node@main
+      - name: Run ESLint
+        run: pnpm lint
+
+  prettier:
+    name: Check code format with Prettier
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Setup environment
+        uses: pooky-labs/actions/setup-node@main
+      - name: Run Prettier
+        run: pnpm format
+
+  unimported:
+    name: Check imports with unimported
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Setup environment
+        uses: pooky-labs/actions/setup-node@main
+      - name: Run unimported
+        run: pnpm unimported

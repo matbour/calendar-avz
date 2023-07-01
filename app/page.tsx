@@ -2,20 +2,13 @@ import type { Metadata } from 'next';
 import { type FC } from 'react';
 import CalendarController from './components/calendar/CalendarController';
 
-interface HomePageProps {}
-
 export const metadata: Metadata = {
   title: 'Mathieu Bour - Zoom Calendar',
+  description: '1 day project for an Avizio assessment',
 };
 
-const HomePageProps: FC<HomePageProps> = () => {
-  return (
-    <div className="min-h-screen">
-      <header className="px-4 py-6 mb-4 bg-sky-500">Mathieu Bour - Zoom Calendar</header>
-
-      <CalendarController />
-    </div>
-  );
+const HomePageProps: FC = () => {
+  return <CalendarController />;
 };
 
 export default HomePageProps;
