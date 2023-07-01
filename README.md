@@ -49,7 +49,7 @@ Website will be available at http://localhost:3000
 
 ## Stack
 
-## General
+### General
 
 - Mostly written in [TypeScript](https://www.typescriptlang.org/) v5.1
 - [Next.js v13 (app directory)](https://nextjs.org/docs/app) as fullstack React framework
