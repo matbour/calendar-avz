@@ -1,14 +1,11 @@
 'use client';
-import {
-  CalendarContext,
-  defaultCalendarContextData as defaultCalendar,
-} from '@/app/components/calendar/CalendarContext';
-import CalendarDays from '@/app/components/calendar/CalendarDays';
-import CalendarGrid from '@/app/components/calendar/CalendarGrid';
 import ChevronDoubleLeft from '@heroicons/react/24/solid/ChevronDoubleLeftIcon';
 import addWeeks from 'date-fns/addWeeks';
 import subWeeks from 'date-fns/subWeeks';
 import { useState, type FC } from 'react';
+import { CalendarContext, defaultCalendarContextData as defaultCalendar } from './CalendarContext';
+import CalendarDays from './CalendarDays';
+import CalendarGrid from './CalendarGrid';
 
 interface CalendarControllerProps {}
 
@@ -16,6 +13,7 @@ const CalendarController: FC<CalendarControllerProps> = () => {
   const [dateRef, setDateRef] = useState(defaultCalendar.dateRef);
   const [meetingStart, setMeetingStart] = useState<Date | undefined>(defaultCalendar.meetingStart);
   const [meetingDuration, setMeetingDuration] = useState(defaultCalendar.meetingDuration);
+  const [slotRef, setSlotRef] = useState<HTMLDivElement | null>(null);
 
   const handlePrev = () => {
     setDateRef((current) => subWeeks(current, 1));
@@ -35,6 +33,8 @@ const CalendarController: FC<CalendarControllerProps> = () => {
         setMeetingStart,
         meetingDuration,
         setMeetingDuration,
+        slotRef,
+        setSlotRef,
       }}
     >
       <div className="flex">

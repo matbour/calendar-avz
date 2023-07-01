@@ -1,11 +1,11 @@
-import { useCalendar } from '@/app/components/calendar/CalendarContext';
-import CalendarSlot from '@/app/components/calendar/CalendarSlot';
-import withDnd from '@/app/components/withDnd';
-import useWeek from '@/app/hooks/useWeek';
 import eachMinuteOfInterval from 'date-fns/esm/eachMinuteOfInterval';
 import endOfDay from 'date-fns/esm/endOfDay';
 import { useEffect, useState, type FC } from 'react';
 import { useWindowSize } from 'usehooks-ts';
+import useWeek from '../../hooks/useWeek';
+import withDnd from '../withDnd';
+import { useCalendar } from './CalendarContext';
+import CalendarSlot from './CalendarSlot';
 
 interface CalendarGridProps {}
 

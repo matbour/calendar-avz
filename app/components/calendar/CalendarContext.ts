@@ -12,6 +12,8 @@ export type CalendarContextData = {
   setMeetingStart: Dispatch<SetStateAction<Date | undefined>>;
   meetingDuration: number;
   setMeetingDuration: Dispatch<SetStateAction<number>>;
+  slotRef: HTMLDivElement | null;
+  setSlotRef: Dispatch<SetStateAction<HTMLDivElement | null>>;
 };
 
 export const defaultCalendarContextData = {
@@ -22,6 +24,8 @@ export const defaultCalendarContextData = {
   setMeetingStart: () => void 0,
   meetingDuration: 60,
   setMeetingDuration: () => void 0,
+  slotRef: null,
+  setSlotRef: () => void 0,
 } satisfies CalendarContextData;
 
 export const CalendarContext = createContext<CalendarContextData>(defaultCalendarContextData);

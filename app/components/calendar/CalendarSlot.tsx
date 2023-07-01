@@ -1,5 +1,3 @@
-import { Expand, Grab, useCalendar } from '@/app/components/calendar/CalendarContext';
-import NewMeeting from '@/app/components/calendar/NewMeeting';
 import { clsx } from 'clsx';
 import differenceInMinutes from 'date-fns/esm/differenceInMinutes';
 import getDate from 'date-fns/esm/getDate';
@@ -10,6 +8,8 @@ import set from 'date-fns/esm/set';
 import { useEffect, useMemo, useState, type FC } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { usePopper } from 'react-popper';
+import { Expand, Grab, useCalendar } from './CalendarContext';
+import NewMeeting from './NewMeeting';
 
 import ChevronDoubleLeft from '@heroicons/react/24/solid/ChevronDoubleLeftIcon';
 interface CalendarSlotProps {
@@ -18,7 +18,8 @@ interface CalendarSlotProps {
 }
 
 const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
-  const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration } = useCalendar();
+  const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration, setSlotRef } =
+    useCalendar();
 
   /**
    * Update the duration of the meeting based on the target time (date is ignored).
@@ -106,6 +107,12 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
   useEffect(() => {
     update?.();
   }, [meetingDuration, update]);
+
+  useEffect(() => {
+    if (isHere) {
+      setSlotRef($ref);
+    }
+  }, [$ref, isHere, setSlotRef]);
 
   return (
     <div

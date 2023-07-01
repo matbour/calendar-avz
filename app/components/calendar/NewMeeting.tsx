@@ -1,29 +1,27 @@
-import { defaultCalendarContextData, useCalendar } from '@/app/components/calendar/CalendarContext';
-import Button from '@/app/components/system/Button';
-import Field from '@/app/components/system/Field';
-import Input from '@/app/components/system/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import addMinutes from 'date-fns/esm/addMinutes';
 import { forwardRef, type ComponentPropsWithRef, type FC, type MouseEventHandler } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import Button from '../system/Button';
+import Field from '../system/Field';
+import Input from '../system/Input';
+import { defaultCalendarContextData, useCalendar } from './CalendarContext';
 
 interface NewMeetingProps extends ComponentPropsWithRef<'form'> {}
 
 const schema = z.object({
   subject: z.string().min(3),
-  email: z.string().email(),
 });
+
+type FormData = z.infer<typeof schema>;
 
 const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingProps>(
   ({ className, ...props }, ref) => {
     const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration } = useCalendar();
     const meetingEnd = meetingStart ? addMinutes(meetingStart, meetingDuration) : undefined;
-
-    const { register, handleSubmit } = useForm<z.infer<typeof schema>>({
-      resolver: zodResolver(schema),
-    });
 
     const onClose: MouseEventHandler = (e) => {
       e.stopPropagation(); // otherwise event will bubble up to the parent CalendarSlot
@@ -31,9 +29,22 @@ const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingPr
       setMeetingDuration(defaultCalendarContextData.meetingDuration);
     };
 
-    const onSubmit = handleSubmit((data) => {
-      console.debug(data); // TODO: handle Zoom API call
+    const { register, handleSubmit } = useForm<FormData>({
+      resolver: zodResolver(schema),
     });
+
+    const { mutate } = useMutation({
+      mutationFn: (data: FormData) => {
+        return fetch('/api/meetings', {
+          method: 'POST',
+          body: JSON.stringify({
+            subject: data.subject,
+          }),
+        });
+      },
+    });
+
+    const onSubmit = handleSubmit((data) => mutate(data));
 
     return (
       <form

@@ -1,6 +1,6 @@
-import CalendarController from '@/app/components/calendar/CalendarController';
 import type { Metadata } from 'next';
 import { type FC } from 'react';
+import CalendarController from './components/calendar/CalendarController';
 
 interface HomePageProps {}
 

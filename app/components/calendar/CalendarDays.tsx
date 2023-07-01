@@ -1,9 +1,9 @@
-import { useCalendar } from '@/app/components/calendar/CalendarContext';
-import useWeek from '@/app/hooks/useWeek';
 import clsx from 'clsx';
 import eachDayOfInterval from 'date-fns/esm/eachDayOfInterval';
 import isToday from 'date-fns/esm/isToday';
 import { type FC } from 'react';
+import useWeek from '../../hooks/useWeek';
+import { useCalendar } from './CalendarContext';
 
 interface CalendarDaysProps {}
 
