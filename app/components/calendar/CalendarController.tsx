@@ -13,7 +13,6 @@ const CalendarController: FC<CalendarControllerProps> = () => {
   const [dateRef, setDateRef] = useState(defaultCalendar.dateRef);
   const [meetingStart, setMeetingStart] = useState<Date | undefined>(defaultCalendar.meetingStart);
   const [meetingDuration, setMeetingDuration] = useState(defaultCalendar.meetingDuration);
-  const [slotRef, setSlotRef] = useState<HTMLDivElement | null>(null);
 
   const handlePrev = () => {
     setDateRef((current) => subWeeks(current, 1));
@@ -33,8 +32,6 @@ const CalendarController: FC<CalendarControllerProps> = () => {
         setMeetingStart,
         meetingDuration,
         setMeetingDuration,
-        slotRef,
-        setSlotRef,
       }}
     >
       <div className="flex">

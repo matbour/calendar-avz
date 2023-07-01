@@ -1,5 +1,5 @@
+import useCreateMeeting from '@/app/hooks/useCreateMeeting';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import addMinutes from 'date-fns/esm/addMinutes';
 import { forwardRef, type ComponentPropsWithRef, type FC, type MouseEventHandler } from 'react';
@@ -33,18 +33,19 @@ const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingPr
       resolver: zodResolver(schema),
     });
 
-    const { mutate } = useMutation({
-      mutationFn: (data: FormData) => {
-        return fetch('/api/meetings', {
-          method: 'POST',
-          body: JSON.stringify({
-            subject: data.subject,
-          }),
-        });
-      },
-    });
+    const { mutate } = useCreateMeeting();
 
-    const onSubmit = handleSubmit((data) => mutate(data));
+    const onSubmit = handleSubmit((data) => {
+      if (!meetingStart) {
+        return;
+      }
+
+      mutate({
+        start: meetingStart,
+        subject: data.subject,
+        duration: meetingDuration,
+      });
+    });
 
     return (
       <form
@@ -73,10 +74,6 @@ const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingPr
         <div className="p-4">
           <Field>
             <Input {...register('subject')} type="text" placeholder="Subject" />
-          </Field>
-
-          <Field>
-            <Input {...register('email')} type="email" placeholder="Your email" />
           </Field>
         </div>
 

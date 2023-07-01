@@ -18,8 +18,7 @@ interface CalendarSlotProps {
 }
 
 const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
-  const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration, setSlotRef } =
-    useCalendar();
+  const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration } = useCalendar();
 
   /**
    * Update the duration of the meeting based on the target time (date is ignored).
@@ -107,12 +106,6 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
   useEffect(() => {
     update?.();
   }, [meetingDuration, update]);
-
-  useEffect(() => {
-    if (isHere) {
-      setSlotRef($ref);
-    }
-  }, [$ref, isHere, setSlotRef]);
 
   return (
     <div
