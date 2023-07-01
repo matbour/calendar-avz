@@ -7,9 +7,11 @@ export default {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      gridTemplateRows: {
+        48: 'repeat(48, minmax(0, 1fr))',
+      },
+      gridTemplateColumns: {
+        week: '100px repeat(7, 1fr)',
       },
     },
   },
