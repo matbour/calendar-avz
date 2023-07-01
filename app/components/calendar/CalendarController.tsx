@@ -11,8 +11,8 @@ interface CalendarControllerProps {}
 
 const CalendarController: FC<CalendarControllerProps> = () => {
   const [dateRef, setDateRef] = useState(defaultCalendar.dateRef);
-  const [meetingStart, setMeetingStart] = useState<Date | undefined>(defaultCalendar.meetingStart);
-  const [meetingDuration, setMeetingDuration] = useState(defaultCalendar.meetingDuration);
+  const [start, setStart] = useState<Date | undefined>(defaultCalendar.start);
+  const [duration, setDuration] = useState(defaultCalendar.duration);
 
   const handlePrev = () => {
     setDateRef((current) => subWeeks(current, 1));
@@ -28,10 +28,10 @@ const CalendarController: FC<CalendarControllerProps> = () => {
         meetings: [],
         dateRef,
         setDateRef,
-        meetingStart,
-        setMeetingStart,
-        meetingDuration,
-        setMeetingDuration,
+        start,
+        setStart,
+        duration,
+        setDuration,
       }}
     >
       <div className="flex">

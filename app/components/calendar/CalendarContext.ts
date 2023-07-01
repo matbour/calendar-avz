@@ -8,20 +8,20 @@ export type CalendarContextData = {
 
   dateRef: Date;
   setDateRef: Dispatch<SetStateAction<Date>>;
-  meetingStart: Date | undefined;
-  setMeetingStart: Dispatch<SetStateAction<Date | undefined>>;
-  meetingDuration: number;
-  setMeetingDuration: Dispatch<SetStateAction<number>>;
+  start: Date | undefined;
+  setStart: Dispatch<SetStateAction<Date | undefined>>;
+  duration: number;
+  setDuration: Dispatch<SetStateAction<number>>;
 };
 
 export const defaultCalendarContextData = {
   meetings: [],
   dateRef: new Date(),
   setDateRef: () => void 0,
-  meetingStart: undefined,
-  setMeetingStart: () => void 0,
-  meetingDuration: 60,
-  setMeetingDuration: () => void 0,
+  start: undefined,
+  setStart: () => void 0,
+  duration: 60,
+  setDuration: () => void 0,
 } satisfies CalendarContextData;
 
 export const CalendarContext = createContext<CalendarContextData>(defaultCalendarContextData);

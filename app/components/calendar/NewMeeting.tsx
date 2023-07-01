@@ -16,36 +16,33 @@ const schema = z.object({
   subject: z.string().min(3),
 });
 
-type FormData = z.infer<typeof schema>;
-
 const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingProps>(
   ({ className, ...props }, ref) => {
-    const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration } = useCalendar();
-    const meetingEnd = meetingStart ? addMinutes(meetingStart, meetingDuration) : undefined;
+    const { start, setStart, duration, setDuration } = useCalendar();
+    const meetingEnd = start ? addMinutes(start, duration) : undefined;
 
-    const onClose: MouseEventHandler = (e) => {
-      e.stopPropagation(); // otherwise event will bubble up to the parent CalendarSlot
-      setMeetingStart(undefined);
-      setMeetingDuration(defaultCalendarContextData.meetingDuration);
-    };
-
-    const { register, handleSubmit } = useForm<FormData>({
+    const { mutate, isLoading } = useCreateMeeting();
+    const { register, handleSubmit } = useForm<z.infer<typeof schema>>({
       resolver: zodResolver(schema),
     });
 
-    const { mutate } = useCreateMeeting();
-
     const onSubmit = handleSubmit((data) => {
-      if (!meetingStart) {
+      if (!start) {
         return;
       }
 
       mutate({
-        start: meetingStart,
+        start: start,
         subject: data.subject,
-        duration: meetingDuration,
+        duration: duration,
       });
     });
+
+    const onClose: MouseEventHandler = (e) => {
+      e.stopPropagation(); // otherwise event will bubble up to the parent CalendarSlot
+      setStart(undefined);
+      setDuration(defaultCalendarContextData.duration);
+    };
 
     return (
       <form
@@ -62,10 +59,7 @@ const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingPr
         </header>
 
         <div className="p-4 border-b">
-          <p>
-            From:{' '}
-            {meetingStart?.toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}
-          </p>
+          <p>From: {start?.toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}</p>
           <p>
             To: {meetingEnd?.toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}
           </p>

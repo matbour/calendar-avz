@@ -18,24 +18,25 @@ interface CalendarSlotProps {
 }
 
 const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
-  const { meetingStart, setMeetingStart, meetingDuration, setMeetingDuration } = useCalendar();
+  const { start, setStart, duration, setDuration } = useCalendar();
+  const disabled = isPast(date);
 
   /**
    * Update the duration of the meeting based on the target time (date is ignored).
    */
   const resize = () => {
-    if (!meetingStart) {
+    if (!start) {
       return; // noop when no meeting is planned
     }
 
     const sameDate = set(date, {
-      year: getYear(meetingStart),
-      month: getMonth(meetingStart),
-      date: getDate(meetingStart),
+      year: getYear(start),
+      month: getMonth(start),
+      date: getDate(start),
     });
 
-    const diffInMinutes = Math.abs(differenceInMinutes(sameDate, meetingStart));
-    setMeetingDuration(diffInMinutes + 30); // always add 1 slot
+    const diffInMinutes = Math.abs(differenceInMinutes(sameDate, start));
+    setDuration(diffInMinutes + 30); // always add 1 slot
   };
 
   const [{ isDragging: isGrabbing }, grab] = useDrag(() => ({
@@ -48,12 +49,12 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
   const [{ isOver: isGrabOver }, grabDrop] = useDrop(
     () => ({
       accept: Grab,
-      drop: () => setMeetingStart(date),
+      drop: () => setStart(date),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
       }),
     }),
-    [meetingStart],
+    [start],
   );
 
   const [, expand] = useDrag(() => ({ type: Expand }));
@@ -67,7 +68,7 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
         };
       },
     }),
-    [meetingStart],
+    [start],
   );
 
   const isOver = isGrabOver || isExpandingOver;
@@ -77,18 +78,18 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
       return true;
     }
 
-    if (!meetingStart) {
+    if (!start) {
       // no meeting planned : do not display anything
       return false;
     }
 
-    if (meetingStart < date) {
+    if (start < date) {
       // meeting is planned earlier: cannot be here
       return false;
     }
 
-    return meetingStart.getTime() - date.getTime() < 30 * 60 * 1000;
-  }, [date, isGrabOver, meetingStart]);
+    return start.getTime() - date.getTime() < 30 * 60 * 1000;
+  }, [date, isGrabOver, start]);
 
   const [$ref, $setRef] = useState<HTMLDivElement | null>(null);
   const [$popper, $setPopper] = useState<HTMLFormElement | null>(null);
@@ -98,14 +99,14 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
   });
 
   const onReset = () => {
-    setMeetingStart(date);
-    // setMeetingDuration(defaultCalendarContextData.meetingDuration);
+    setStart(date);
+    // setDuration(defaultCalendarContextData.duration);
   };
 
-  // Update popper position when the meetingDuration changes
+  // Update popper position when the duration changes
   useEffect(() => {
     update?.();
-  }, [meetingDuration, update]);
+  }, [duration, update]);
 
   return (
     <div
@@ -115,9 +116,9 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
       }}
       className={clsx(className, 'h-8 border relative box-border', {
         ['bg-sky-500/30']: isExpandingOver,
-        ['bg-gray-300']: isPast(date),
+        ['bg-gray-300 cursor-not-allowed']: isPast(date),
       })}
-      onClick={onReset}
+      onClick={!disabled ? onReset : undefined}
     >
       {isExpandingOver && <ChevronDoubleLeft width={24} className="mx-auto -rotate-90" />}
 
@@ -127,7 +128,7 @@ const CalendarSlot: FC<CalendarSlotProps> = ({ date, className }) => {
           className={clsx('relative z-10 flex flex-col bg-sky-500 resize-y rounded', {
             ['opacity-50']: isGrabbing || isOver,
           })}
-          style={{ height: (meetingDuration / 30) * 32 }}
+          style={{ height: (duration / 30) * 32 }}
         >
           {/* Grabber */}
           <div ref={grab} className="flex-grow p-2 cursor-grab">
