@@ -21,7 +21,7 @@ const NewMeeting: FC<NewMeetingProps> = forwardRef<HTMLFormElement, NewMeetingPr
     const { start, setStart, duration, setDuration } = useCalendar();
     const meetingEnd = start ? addMinutes(start, duration) : undefined;
 
-    const { mutate, isLoading } = useCreateMeeting();
+    const { mutate } = useCreateMeeting();
     const { register, handleSubmit } = useForm<z.infer<typeof schema>>({
       resolver: zodResolver(schema),
     });
