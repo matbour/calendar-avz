@@ -27,6 +27,7 @@ export default async function createMeeting(token: string, options: CreateMeetin
     duration: options.duration,
     password: '123456',
     start_time: options.start.toISOString(),
+    timezone: 'UTC',
     type: 2, // Type 2 — A scheduled meeting.
   };
 
