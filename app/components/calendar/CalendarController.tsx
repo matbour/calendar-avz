@@ -3,9 +3,9 @@ import useTimezone from '@/app/hooks/useTimezone';
 import ChevronDoubleLeft from '@heroicons/react/24/solid/ChevronDoubleLeftIcon';
 import zonedTimeToUtc from 'date-fns-tz/zonedTimeToUtc';
 import addWeeks from 'date-fns/addWeeks';
+import endOfWeek from 'date-fns/esm/endOfWeek';
 import format from 'date-fns/esm/format';
-import nextSunday from 'date-fns/esm/nextSunday';
-import previousMonday from 'date-fns/esm/previousMonday';
+import startOfWeek from 'date-fns/esm/startOfWeek';
 import subWeeks from 'date-fns/subWeeks';
 import { useState, type FC } from 'react';
 import { CalendarContext, defaultCalendarContextData as defaultCalendar } from './CalendarContext';
@@ -21,8 +21,14 @@ const CalendarController: FC = () => {
   const [duration, setDuration] = useState(defaultCalendar.duration);
 
   const timezone = useTimezone();
-  const monday = zonedTimeToUtc(format(previousMonday(dateRef), 'yyyy-MM-dd 00:00:00'), timezone);
-  const sunday = zonedTimeToUtc(format(nextSunday(dateRef), 'yyyy-MM-dd 23:59:59'), timezone);
+  const monday = zonedTimeToUtc(
+    format(startOfWeek(dateRef, { weekStartsOn: 1 }), 'yyyy-MM-dd 00:00:00'),
+    timezone,
+  );
+  const sunday = zonedTimeToUtc(
+    format(endOfWeek(dateRef, { weekStartsOn: 1 }), 'yyyy-MM-dd 23:59:59'),
+    timezone,
+  );
 
   const handlePrev = () => {
     setDateRef((current) => subWeeks(current, 1));

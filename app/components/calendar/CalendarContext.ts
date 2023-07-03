@@ -1,5 +1,5 @@
-import nextSunday from 'date-fns/esm/nextSunday';
-import previousMonday from 'date-fns/esm/previousMonday';
+import endOfWeek from 'date-fns/esm/endOfWeek';
+import startOfWeek from 'date-fns/esm/startOfWeek';
 import { createContext, useContext, type Dispatch, type SetStateAction } from 'react';
 
 export type CalendarContextData = {
@@ -23,8 +23,8 @@ export type CalendarContextData = {
 export const defaultCalendarContextData = {
   dateRef: new Date(),
   setDateRef: () => void 0,
-  monday: previousMonday(new Date()),
-  sunday: nextSunday(new Date()),
+  monday: startOfWeek(new Date(), { weekStartsOn: 1 }),
+  sunday: endOfWeek(new Date(), { weekStartsOn: 1 }),
   start: undefined,
   setStart: () => void 0,
   duration: 60,
